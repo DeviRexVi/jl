@@ -127,6 +127,42 @@
     .mid { opacity: 0.6; }
     .near { opacity: 0.9; filter: drop-shadow(0 0 6px rgba(255,255,255,0.6)); }
 
+    .bow {
+  position: fixed;
+  top: -50px;
+  z-index: 1;
+  pointer-events: none;
+  animation: fallSpin linear infinite;
+}
+
+/* profundidade */
+.far {
+  opacity: 0.35;
+  filter: blur(2px);
+  transform: scale(0.8);
+}
+
+.mid {
+  opacity: 0.6;
+  transform: scale(1);
+}
+
+.near {
+  opacity: 0.9;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.6));
+  transform: scale(1.2);
+}
+
+/* animação */
+@keyframes fallSpin {
+  0% {
+    transform: translateY(-60px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}
+
     @keyframes fallSpin {
       0% { transform: translateY(-50px) rotateZ(0deg); }
       100% { transform: translateY(110vh) rotateZ(360deg); }
@@ -305,6 +341,45 @@ noBtn?.addEventListener('touchstart', (e) => {
   e.preventDefault();
   moveNoBtn();
 });
+
+const colors = ['#00aaff', '#ffffff', '#66ccff'];
+const depths = ['far', 'mid', 'near'];
+
+function createBow() {
+  const bow = document.createElement('div');
+  bow.classList.add('bow');
+  bow.innerText = '🎀';
+
+  // posição aleatória horizontal
+  bow.style.left = Math.random() * 100 + 'vw';
+
+  // duração aleatória (movimento natural)
+  const duration = 6 + Math.random() * 5;
+  bow.style.animationDuration = duration + 's';
+
+  // profundidade
+  const depth = depths[Math.floor(Math.random() * depths.length)];
+  bow.classList.add(depth);
+
+  // tamanho baseado na profundidade
+  let size;
+  if (depth === 'far') size = 10 + Math.random() * 6;
+  if (depth === 'mid') size = 14 + Math.random() * 8;
+  if (depth === 'near') size = 18 + Math.random() * 12;
+
+  bow.style.fontSize = size + 'px';
+
+  // brilho
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  bow.style.textShadow = `0 0 8px ${color}`;
+
+  document.body.appendChild(bow);
+
+  setTimeout(() => bow.remove(), duration * 1000);
+}
+
+setInterval(createBow, 500);
+
 </script>
 
 </body>
