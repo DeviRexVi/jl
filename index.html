@@ -37,10 +37,14 @@
     h1 { font-size: clamp(22px, 5vw, 28px); margin-bottom: 10px; }
     h2 { font-size: clamp(18px, 4.5vw, 22px); margin-bottom: 10px; }
     h5 { opacity: 0.7; margin-bottom: 20px; }
+    h5.falling {
+        opacity: 0.4; margin-bottom: 20px; 
+        color: #a7a7a7;
+      }
 
     p {
       margin: 15px 0;
-      line-height: 1.6;
+      line-height: 1.8;
       font-size: clamp(14px, 3.5vw, 15px);
       min-height: 20px;
     }
@@ -69,7 +73,7 @@
 
     #noBtn { position: relative; }
 
-    /* 📸 IMAGENS */
+    /*IMAGENS */
     .image-box {
       width: 100%;
       max-width: 320px;
@@ -98,7 +102,19 @@
       object-position: center top;
     }
 
-    /* 🎀 LAÇOS */
+    #she{
+      max-height: 350px;
+    }
+
+    #hands{
+      max-height: 350px;
+    }
+
+    #shework{
+      max-height: 320px;
+    }
+
+    /*LAÇOS */
     .bow {
       position: fixed;
       top: -50px;
@@ -116,7 +132,27 @@
       100% { transform: translateY(110vh) rotateZ(360deg); }
     }
 
-    /* 📱 mobile ajustes (iPhone 14 / Z Flip 6) */
+    /*CARTA ESTILO LIVRO */
+    .message-box {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
+
+      text-align: left;
+      max-height: 55vh;
+      overflow-y: auto;
+    }
+
+    .message-box p {
+      margin: 18px 0;
+      line-height: 1.8;
+      text-indent: 1.6em; /* recuo da primeira linha */
+    }
+
+    /*mobile */
     @media (max-width: 430px) {
       .container {
         padding: 12px;
@@ -162,12 +198,13 @@
   <div id="step2" class="hidden">
     <h2>Você lembra do dia em que a gente se conheceu?</h2>
     <h5>12/04/2006 🩵</h5>
+    <h5 class="falling">"My last made me feel like I would never try again, but when I saw I felt something I never felt..."</h5>
     <button onclick="nextStep(3)">Sim 💙</button>
   </div>
 
   <div id="step3" class="hidden">
     <h2>Olha isso aqui... 🥺</h2>
-    <div class="image-box tall">
+    <div class="image-box tall" id="she">
       <img src="images/atarena.jpeg">
     </div>
     <p class="type"></p>
@@ -176,7 +213,7 @@
 
   <div id="step4" class="hidden">
     <h2>Uma memória que eu vou guardar pra sempre 💙</h2>
-    <div class="image-box tall">
+    <div class="image-box tall" id="hands">
       <img src="images/holdinghands.jpeg">
     </div>
     <p class="type"></p>
@@ -185,7 +222,7 @@
 
   <div id="step5" class="hidden">
     <h2>Tem coisas pequenas que dizem muito 💙</h2>
-    <div class="image-box tall">
+    <div class="image-box tall" id="shework">
       <img src="images/jsimg1.jpeg" class="img-adjust-top">
     </div>
     <p class="type"></p>
@@ -202,7 +239,10 @@
 
   <div id="step7" class="hidden">
     <h1>Porque eu gosto demais de ti 💙</h1>
-    <p class="type"></p>
+
+    <div class="message-box">
+      <p class="type"></p>
+    </div>
   </div>
 
 </div>
@@ -210,7 +250,7 @@
 <script>
 const texts = {
   step3: "Eu achei muito injusto tu me mandar essa foto... Porque, pela primeira vez, eu quis ir assistir um jogo daquele timinho de mãos dadas contigo.",
-  
+
   step4: "Talvez tu nem imagine o quanto essa foto significa pra mim. Ela representa um dos momentos mais felizes dos últimos tempos pra mim. E mesmo sendo o mais alto e forte, eu me sentia completamente seguro segurando a tua mão.",
 
   step5: "Toda vez que tu me manda uma foto indo pro trabalho, eu lembro do jeito que tu fala das crianças... e isso me faz me apaixonar um pouquinho mais toda vez. Eu amo o jeito que tu fala com brilho na voz.",
@@ -221,7 +261,8 @@ Eu não precisei me esforçar para fazer você gostar de mim. E, sendo sincero, 
 
 Isso me toca profundamente, porque por muito tempo eu tentei fazer pessoas me enxergarem de verdade, tentei caber em lugares onde eu não era exatamente eu… e quase nunca deu certo.
 
-Hoje eu posso dizer, com uma sensação que eu nunca tinha sentido antes, que estou apaixonado. E que eu entreguei meu coração para alguém que me faz sentir em paz com isso, como se finalmente não precisasse mais lutar para ser visto.`};
+Hoje eu posso dizer, com uma sensação que eu nunca tinha sentido antes, que estou apaixonado. E que eu entreguei meu coração para alguém que me faz sentir em paz com isso, como se finalmente não precisasse mais lutar para ser visto.`
+};
 
 function typeWriter(element, text, speed = 25) {
   element.innerHTML = "";
@@ -251,7 +292,6 @@ function nextStep(step) {
   }
 }
 
-/* ❌ botão fugir (touch + mouse) */
 const noBtn = document.getElementById('noBtn');
 
 function moveNoBtn() {
@@ -265,34 +305,6 @@ noBtn?.addEventListener('touchstart', (e) => {
   e.preventDefault();
   moveNoBtn();
 });
-
-/* 🎀 LAÇOS */
-const colors = ['#00aaff', '#ffffff', '#66ccff'];
-const depths = ['far', 'mid', 'near'];
-
-function createBow() {
-  const bow = document.createElement('div');
-  bow.classList.add('bow');
-  bow.innerText = '🎀';
-
-  bow.style.left = Math.random() * 100 + 'vw';
-
-  const duration = 8 + Math.random() * 4;
-  bow.style.animationDuration = duration + 's';
-
-  const depth = depths[Math.floor(Math.random() * depths.length)];
-  bow.classList.add(depth);
-
-  bow.style.fontSize = (12 + Math.random() * 10) + 'px';
-
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  bow.style.textShadow = `0 0 6px ${color}`;
-
-  document.body.appendChild(bow);
-  setTimeout(() => bow.remove(), duration * 1000);
-}
-
-setInterval(createBow, 500);
 </script>
 
 </body>
